@@ -1,0 +1,114 @@
+// Prisma schema for JobTrackr
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String           @id @default(cuid())
+  name           String?
+  email          String           @unique
+  passwordHash   String?
+  image          String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  applications   Application[]
+  resumeAnalyses ResumeAnalysis[]
+  accounts       Account[]
+  sessions       Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Application {
+  id             String           @id @default(cuid())
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company        String
+  role           String
+  jobUrl         String?
+  salary         String?
+  location       String?
+  locationType   String?          // Remote, Hybrid, On-site
+  status         String           @default("WISHLIST") // WISHLIST, APPLIED, INTERVIEW, OFFER, REJECTED
+  appliedDate    DateTime?
+  notes          String?
+  priority       String?          @default("MEDIUM")   // HIGH, MEDIUM, LOW
+  contactName    String?
+  contactEmail   String?
+  order          Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  statusHistory  StatusHistory[]
+  resumeAnalyses ResumeAnalysis[]
+
+  @@index([userId, status])
+}
+
+model StatusHistory {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStatus    String?
+  toStatus      String
+  note          String?
+  changedAt     DateTime    @default(now())
+
+  @@index([applicationId])
+}
+
+model ResumeAnalysis {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applicationId   String?
+  application     Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  resumeText      String
+  jobDescription  String
+  matchScore      Int          // 0 - 100
+  missingKeywords String       // JSON array or comma separated
+  strengths       String?      // JSON array
+  improvements    String       // JSON array of 3 actionable suggestions
+  summary         String?
+  createdAt       DateTime     @default(now())
+
+  @@index([userId])
+}
