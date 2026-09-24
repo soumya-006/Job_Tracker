@@ -10,10 +10,9 @@ import {
   Lock,
   Mail,
   Loader2,
-  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
-import { loginUser, loginDemoUser } from "@/actions/auth";
+import { loginUser } from "@/actions/auth";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +22,6 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 export default function LoginPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isDemoLoading, setIsDemoLoading] = React.useState(false);
 
   const {
     register,
@@ -56,26 +54,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setIsDemoLoading(true);
-    try {
-      toast.loading("Preparing demo workspace...", { id: "demo-login" });
-      const res = await loginDemoUser();
-      if (res.success) {
-        toast.success("Logged in as Demo Candidate!", { id: "demo-login" });
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        toast.error(res.error || "Failed to log into demo account.", { id: "demo-login" });
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Demo login encountered an issue.", { id: "demo-login" });
-    } finally {
-      setIsDemoLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-slate-50 dark:bg-[#08090e] relative selection:bg-indigo-500 selection:text-white">
       {/* Background glow */}
@@ -100,35 +78,6 @@ export default function LoginPage() {
             Sign in to manage your applications and AI resume matches
           </p>
         </div>
-
-        {/* 1-Click Instant Demo Login Banner */}
-        <Card className="border-pink-500/30 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-indigo-500/10 shadow-sm">
-          <CardContent className="p-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Zap className="h-4 w-4 text-pink-500 fill-pink-500" />
-                Want to test immediately?
-              </p>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                Instant access with preloaded sample job applications & analyses.
-              </p>
-            </div>
-            <Button
-              type="button"
-              variant="gradient"
-              size="sm"
-              onClick={handleDemoLogin}
-              disabled={isDemoLoading || isSubmitting}
-              className="shrink-0 text-xs font-bold shadow-pink-500/20"
-            >
-              {isDemoLoading ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <span>1-Click Demo</span>
-              )}
-            </Button>
-          </CardContent>
-        </Card>
 
         {/* Main Sign In Card */}
         <Card className="border-slate-200/80 dark:border-slate-800 shadow-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
@@ -174,7 +123,7 @@ export default function LoginPage() {
                 type="submit"
                 variant="gradient"
                 className="w-full h-11 text-sm font-bold shadow-indigo-500/25 mt-2"
-                disabled={isSubmitting || isDemoLoading}
+                disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <>

@@ -77,7 +77,7 @@ export default function HomePage() {
                 size="lg"
                 className="w-full h-12 px-8 font-bold text-base gap-2 shadow-xl shadow-indigo-500/25"
               >
-                <span>Launch App / 1-Click Demo</span>
+                <span>Sign In / Launch App</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
