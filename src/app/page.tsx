@@ -71,24 +71,24 @@ export default function HomePage() {
 
           {/* Action CTAs */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-            <Link href="/login" className="w-full sm:w-auto">
+            <Link href="/register" className="w-full sm:w-auto">
               <Button
                 variant="gradient"
                 size="lg"
                 className="w-full h-12 px-8 font-bold text-base gap-2 shadow-xl shadow-indigo-500/25"
               >
-                <span>Sign In / Launch App</span>
+                <span>Get Started Free</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
 
-            <Link href="/register" className="w-full sm:w-auto">
+            <Link href="/login" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
                 className="w-full h-12 px-6 font-semibold text-base bg-white dark:bg-slate-900 shadow-sm"
               >
-                Create Free Account
+                Sign In
               </Button>
             </Link>
           </div>

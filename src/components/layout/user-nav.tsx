@@ -56,11 +56,13 @@ export function UserNav({ user }: UserNavProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-semibold leading-none text-slate-900 dark:text-white">
-              {user?.name || "Job Seeker"}
+              {user?.name || "Account"}
             </p>
-            <p className="text-xs leading-none text-slate-500 dark:text-slate-400 truncate">
-              {user?.email || "candidate@jobtrackr.io"}
-            </p>
+            {user?.email && (
+              <p className="text-xs leading-none text-slate-500 dark:text-slate-400 truncate">
+                {user.email}
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
