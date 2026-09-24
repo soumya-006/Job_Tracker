@@ -72,7 +72,7 @@ export default function LoginPage() {
             </div>
           </Link>
           <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-            Welcome back to JobTrackr
+            Welcome to JobTrackr
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Sign in to manage your applications and AI resume matches
